@@ -87,3 +87,41 @@ for(let v of FibIterable(50)){
     console.log(v);
 }
 ```
+
+
+## 5/ Représentation graphique
+
+Une particularité remarquable de la suite de Fibonnacci est que le rapport entre deux termes successifs tend asymptotiquement vers le [Nombre d'Or (Phi, φ)](https://fr.wikipedia.org/wiki/Nombre_d%27or) :
+
+```
+U[n+1] / U[n] -> Phi
+```
+
+Le Nombre d'Or peut être utilisé pour réaliser la [Spirale d'Or](https://fr.wikipedia.org/wiki/Spirale_d%27or), dont la spécificité est de devenir plus large par un facteur de φ à chaque quart de tour.
+
+Les valeurs successives générées par notre itérable pourront donc être utilisée en tant que rayons successifs pour notre spirale, une pour chaque quart de tour. Etant donné les propriétés de la suite de Fibonnacci, nous aurons ainsi une approximation assez juste de la Spirale d'Or.
+
+Dans un premier temps nous représenteront cette spirale par des segments de droite pour chaque quart de tour.
+
+### A - Graphisme en Javascript
+
+En vous aidant d'Internet, repérer les différentes technologies ou API accessibles depuis JavaScript qui permettent de réaliser des représentations graphiques.
+
+**Hints**:
+- SVG et ici la balise path
+- Canvas et son context2D
+
+### B - Utilisation du SVG
+
+**Hints**:
+- Nous utiliserons la balise `path` de SVG
+- Puisque nous avons choisi de représenter notre spirale par des segments, le path pourra ne comporter que des instructions `MoveTo` et `LineTo`.
+- Nous partons ici de rayons est d'angles (coordonnées polaires) pour construire notre spirale, alors que SVG (comme canvas) utilisent des coordonnées x, y (coordonnées cartésiennes). La création d'une fonction transformant des coordonnées polaires en cartésiennes est donc chaudement recommandée.
+
+<details>
+ <summary>Proposition pour `polar2cart`</summary>
+
+```javascript
+const polar2cart = (radius, angle) => ({ x: radius*Math.cos(angle/180*Math.PI), y: radius*Math.sin(angle/180*Math.PI) });
+```
+</details>
