@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FibIter</title>
+  </head>
+  <body>
+      <svg width="800" height="800" xmlns="http://www.w3.org/2000/svg">
+        <path d="" stroke="black" fill="transparent"></path>
+      </svg>
+    <script>
+      // 1st step
+      // let prev = 0, curr = 1;
+      // const next = () => {
+      //   const temp = prev;
+      //   prev = curr;
+      //   curr += temp;
+      //   return curr;
+      // }
+      // next();
+      // next();
+
+      // 1bis step
+      // Add DOM interaction (button next, value label)
+
+      
+      // Iterator protocol https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Les_protocoles_iteration
+
+      // 2nd step
+      // let prev = 0, curr = 1;
+      // const FibIterateur = {
+      //   next: () => {
+      //     const temp = prev;
+      //     prev = curr;
+      //     curr += temp;
+      //     return { value: curr, done: false };
+      //   }
+      // };
+      // FibIterateur.next();
+      // FibIterateur.next();
+
+      // 3rd step
+      // const FibIterable = {
+      //   [Symbol.iterator]() {
+      //     let prev = 0, curr = 1;
+      //     return {
+      //       next() {
+      //         [prev, curr] = [curr, prev+curr];
+      //         // const temp = prev;
+      //         // prev = curr;
+      //         // curr += temp;
+      //         return { value: curr, done: false };
+      //       }
+      //     }
+      //   }
+      // }
+      // for (var v of FibIterable) {
+      //   console.log( v );
+      //   if (v > 50) break;
+      // }
+
+      // 4th step
+      // const Fib = (max) => ({
+      //   [Symbol.iterator]() {
+      //     let prev = 0, curr = 1;
+      //     return {
+      //       next() {
+      //         const temp = prev;
+      //         prev = curr;
+      //         curr += temp;
+      //         return { value: curr, done: (curr > max) };
+      //       }
+      //     }
+      //   }
+      // });
+      // for (var v of Fib(50)) {
+      //     console.log( v );
+      // }
+
+      // 5th step
+      // https://developer.mozilla.org/fr/docs/Web/SVG/Tutoriel/Paths
+      // const Fib = (max) => ({
+      //   [Symbol.iterator]() {
+      //     let prev = 0, curr = 1;
+      //     return {
+      //       next() {
+      //         const temp = prev;
+      //         prev = curr;
+      //         curr += temp;
+      //         return { value: curr, done: (curr > max) };
+      //       }
+      //     }
+      //   }
+      // });
+
+      // const polar2cart = (radius, angle) => ({ x: radius*Math.cos(angle/180*Math.PI), y: radius*Math.sin(angle/180*Math.PI) })
+
+      // const $path = document.querySelector('path');
+      // const center = { x: 400, y: 400 };
+      // let path = `M ${center.x} ${center.y + 1} `;
+      // let cpt = 0;
+      
+      // for(let v of Fib(1000)){
+      //   const pos = polar2cart(v, cpt*90);
+      //   path += `L ${center.x + pos.x} ${center.y+pos.y}`;
+
+      //   ++cpt;
+      // }
+
+      // $path.setAttribute('d', path);
+
+
+      // Aller plus loin:
+
+      // 6 - Plus de points ! (lerp)
+      const Fib = (max) => ({
+        [Symbol.iterator]() {
+          let prev = 0, curr = 1;
+          return {
+            next() {
+              const temp = prev;
+              prev = curr;
+              curr += temp;
+              return { value: curr, done: (curr > max) };
+            }
+          }
+        }
+      });
+
+      const polar2cart = (radius, angle) => ({ x: radius*Math.cos(angle/180*Math.PI), y: radius*Math.sin(angle/180*Math.PI) })
+
+      const lerp = (start, end, ratio) => end * ratio + start * (1 - ratio);
+
+      const $path = document.querySelector('path');
+      const center = { x: 400, y: 400 };
+      let path = `M ${center.x} ${center.y + 1} `;
+      let cpt = 0;
+      
+      let prev = 0;
+      for(let v of Fib(1000)){
+
+        for(let i = 0; i < 90; i += 1){
+          const vLerp = lerp(prev, v, i / 90);
+          const pos = polar2cart(vLerp, cpt*90 + i);
+          path += `L ${center.x + pos.x} ${center.y+pos.y} `;
+        }
+        
+
+        prev = v;
+        ++cpt;
+      }
+
+      $path.setAttribute('d', path);
+
+      // 7 - Performances ! (canvas)
+
+
+      // Déviations:
+      // - Number.MAX_SAFE, Number.MAX_VALUE, BigInts
+    </script>
+  </body>
+</html>
